@@ -1,5 +1,6 @@
 import numpy as np
 import math, random
+#http://archive.ics.uci.edu/ml/datasets/Horse+Colic
 
 def getDataSet(file):
     trainSet = []
