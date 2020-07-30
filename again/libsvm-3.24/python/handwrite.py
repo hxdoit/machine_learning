@@ -3,6 +3,7 @@ from svmutil import *
 import os,sys
 
 #https://www.jianshu.com/p/bcc999fc2c8b
+#https://www.cnblogs.com/DeeLMind/p/8056495.html
 #np.set_printoptions(threshold=np.inf)
 
 def img2vec(fileLoc):
