@@ -1,5 +1,6 @@
 import numpy as np
 import math
+import matplotlib.pyplot as plt
 
 def loadSimpleData():
     dataMat = np.matrix([
@@ -73,7 +74,7 @@ def train(dataSet, classLabels):
     d = [1.0 / dataSet.shape[0]] * dataSet.shape[0]
     addedPredict = np.zeros(dataSet.shape[0])
     trees = []
-    iter = 50
+    iter = 20
     for i in range(iter):
         tree={}
         wError, featureIdx, value, compare, predict = oneLevelDs(dataSet, classLabels, d)
@@ -107,7 +108,36 @@ def classify(line, trees):
     for i in range(len(trees)):
         rtn = judge(line, trees[i]['featureIdx'], trees[i]['compare'], trees[i]['value'])
         addedPredict += trees[i]['alpha'] * rtn[0]
-    return np.sign(addedPredict)
+    return np.sign(addedPredict), addedPredict
+
+def plot(testLabelSet, originArr):
+    positiveNum = np.sum((np.array(testLabelSet) == 1).astype(int))
+    negativeNum = len(testLabelSet) - positiveNum
+    xStep = 1.0 / negativeNum
+    yStep = 1.0 / positiveNum
+    sortIdx = np.argsort(-np.array(originArr))
+    x = [0.0]
+    y = [0.0]
+    curX = 0.0
+    curY = 0.0
+    for i in range(len(sortIdx)):
+        if testLabelSet[sortIdx[i]] == -1:
+            curX += xStep
+            x.append(curX)
+            y.append(curY)
+        else:
+            curY += yStep
+            x.append(curX)
+            y.append(curY)
+        plt.text(x[-1],y[-1],'%.2f' % originArr[sortIdx[i]], fontsize=7)
+        print originArr[sortIdx[i]]
+    x.append(0.0)
+    y.append(0.0)
+    plt.plot(x, y, label="2", color="red", linewidth = 1, linestyle = '-')
+    plt.xlabel("FPR")
+    plt.ylabel("TPR")
+    plt.title("ROC")
+    plt.show()
 
 if __name__ == '__main__':
     #dataSet, classLabels = loadSimpleData()
@@ -115,11 +145,15 @@ if __name__ == '__main__':
     testSet, testLabelSet = getDataSet('horse-colic.test')
     trees = train(trainSet, trainLabelSet)
     succ = 1.0
+    originArr = []
     for i in range(len(testSet)):
-        predict = classify(testSet[i], trees)
+        predict, origin = classify(testSet[i], trees)
+        originArr.append(origin)
         if predict == testLabelSet[i]:
             succ += 1
     print succ, len(testSet), succ/len(testSet)
+    plot(testLabelSet, originArr)
+
 
 
 
