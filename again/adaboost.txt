@@ -1,0 +1,4 @@
+prove:
+    https://en.wikipedia.org/wiki/AdaBoost
+demo:
+    https://www.jianshu.com/p/389d28f853c0
