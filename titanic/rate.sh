@@ -1,0 +1,1 @@
+awk -F"," 'BEGIN{OFS="|"}{key=$1"""a";if(key in arr1)arr2[key]=$2;else {arr1[key]=$2}}END{for(i in arr1)print i,arr2[i],arr1[i]}' gender_submission.csv logistic_regression_predictions.csv|awk -F"|" '{if(int($2)==int($3))succ++;else {print $0;fail++}}END{print succ,fail}'
